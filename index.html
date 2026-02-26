@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COFE — Centro de Otorrinolaringologia e Fonoaudiologia Especializada</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;900&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  /* ===== BRAND TOKENS ===== */
+  :root {
+    --green-light: #7AC470;
+    --green-dark:  #317841;
+    --blue-mid:    #006C92;
+    --blue-deep:   #005575;
+    --blue-gray:   #5B5B67;
+    --warm:        #F2DDC8;
+    --white:       #FFFFFF;
+    --off-white:   #F8F9FB;
+    --text:        #1A2030;
+    --text-light:  #4A5568;
+
+    --font-body: 'Nunito Sans', sans-serif;
+    --font-display: 'DM Serif Display', serif;
+
+    --ease: cubic-bezier(0.4, 0, 0.2, 1);
+    --shadow: 0 4px 32px rgba(0,85,117,0.10);
+    --shadow-lg: 0 12px 60px rgba(0,85,117,0.16);
+  }
+
+  /* ===== RESET ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; font-size: 16px; }
+  body {
+    font-family: var(--font-body);
+    background: var(--white);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+  img { max-width: 100%; display: block; }
+  a { text-decoration: none; color: inherit; }
+  ul { list-style: none; }
+
+  /* ===== PAGES ===== */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    padding: 0 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 72px;
+    transition: background 0.4s var(--ease), box-shadow 0.4s var(--ease);
+  }
+  nav.scrolled {
+    background: rgba(255,255,255,0.97);
+    box-shadow: 0 1px 20px rgba(0,85,117,0.10);
+  }
+  nav.on-dark { /* over hero */ }
+
+  .nav-logo {
+    display: flex; align-items: center; gap: 12px; cursor: pointer;
+  }
+  .nav-logo svg { height: 40px; width: auto; }
+  .nav-logo-text {
+    display: flex; flex-direction: column; line-height: 1.1;
+  }
+  .nav-logo-text span:first-child {
+    font-family: var(--font-body); font-weight: 900; font-size: 1.25rem;
+    color: var(--blue-deep); letter-spacing: 0.04em;
+  }
+  .nav-logo-text span:last-child {
+    font-size: 0.58rem; color: var(--blue-mid); letter-spacing: 0.10em;
+    text-transform: uppercase; font-weight: 600;
+  }
+  .nav-links {
+    display: flex; align-items: center; gap: 2rem;
+  }
+  .nav-links a {
+    font-size: 0.82rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--blue-deep);
+    position: relative; padding-bottom: 2px;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: 0; left: 0;
+    width: 0; height: 2px; background: var(--green-light);
+    transition: width 0.3s var(--ease);
+  }
+  .nav-links a:hover::after { width: 100%; }
+
+  .btn-nav {
+    background: var(--blue-deep); color: var(--white) !important;
+    padding: 10px 22px; border-radius: 50px;
+    font-size: 0.78rem !important; font-weight: 800 !important;
+    letter-spacing: 0.1em !important;
+    transition: background 0.3s, transform 0.2s;
+  }
+  .btn-nav:hover { background: var(--green-dark) !important; transform: translateY(-1px); }
+  .btn-nav::after { display: none !important; }
+
+  .nav-hamburger {
+    display: none; flex-direction: column; gap: 5px; cursor: pointer;
+    background: none; border: none; padding: 4px;
+  }
+  .nav-hamburger span {
+    display: block; width: 24px; height: 2px; background: var(--blue-deep);
+    transition: 0.3s;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    position: relative; height: 100vh; min-height: 640px;
+    display: flex; align-items: center;
+    overflow: hidden; background: var(--blue-deep);
+  }
+  .hero-video-wrap {
+    position: absolute; inset: 0; z-index: 0;
+  }
+  .hero-video-wrap video {
+    width: 100%; height: 100%; object-fit: cover;
+    opacity: 0.22; filter: saturate(0.6);
+    transform: scale(1.04);
+    animation: heroZoom 20s ease-in-out infinite alternate;
+  }
+  @keyframes heroZoom {
+    from { transform: scale(1.04); }
+    to   { transform: scale(1.12); }
+  }
+  .hero-overlay {
+    position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(135deg,
+      rgba(0,85,117,0.82) 0%,
+      rgba(0,108,146,0.60) 50%,
+      rgba(49,120,65,0.40) 100%);
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 0 8%; max-width: 780px;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: rgba(122,196,112,0.18);
+    border: 1px solid rgba(122,196,112,0.5);
+    color: var(--green-light);
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em;
+    text-transform: uppercase; padding: 6px 16px; border-radius: 50px;
+    margin-bottom: 1.6rem;
+    animation: fadeUp 0.9s var(--ease) both;
+  }
+  .hero-eyebrow::before {
+    content: ''; width: 6px; height: 6px;
+    background: var(--green-light); border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.6); }
+  }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 5.5vw, 4.4rem);
+    color: var(--white); line-height: 1.10; font-weight: 400;
+    margin-bottom: 1.4rem;
+    animation: fadeUp 0.9s 0.15s var(--ease) both;
+  }
+  .hero h1 em {
+    font-style: italic; color: var(--green-light);
+  }
+  .hero-sub {
+    font-size: 1.05rem; color: rgba(255,255,255,0.80);
+    font-weight: 300; line-height: 1.7; max-width: 540px;
+    margin-bottom: 2.4rem;
+    animation: fadeUp 0.9s 0.3s var(--ease) both;
+  }
+  .hero-actions {
+    display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap;
+    animation: fadeUp 0.9s 0.45s var(--ease) both;
+  }
+  .btn-primary {
+    background: var(--green-light); color: var(--blue-deep);
+    padding: 14px 32px; border-radius: 50px;
+    font-weight: 800; font-size: 0.88rem; letter-spacing: 0.06em;
+    text-transform: uppercase; display: inline-flex; align-items: center; gap: 8px;
+    transition: transform 0.25s, box-shadow 0.25s, background 0.25s;
+    box-shadow: 0 6px 24px rgba(122,196,112,0.4);
+  }
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 36px rgba(122,196,112,0.5);
+    background: var(--white);
+  }
+  .btn-ghost {
+    color: rgba(255,255,255,0.85); font-weight: 600; font-size: 0.88rem;
+    letter-spacing: 0.05em; display: inline-flex; align-items: center; gap: 6px;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+    padding-bottom: 2px;
+    transition: color 0.3s, border-color 0.3s;
+  }
+  .btn-ghost:hover { color: var(--green-light); border-color: var(--green-light); }
+
+  .hero-stats {
+    position: absolute; bottom: 3rem; right: 8%; z-index: 2;
+    display: flex; gap: 2rem;
+    animation: fadeUp 0.9s 0.6s var(--ease) both;
+  }
+  .hero-stat {
+    text-align: right; border-right: 2px solid rgba(122,196,112,0.5);
+    padding-right: 1.5rem;
+  }
+  .hero-stat:last-child { border-right: none; padding-right: 0; }
+  .hero-stat-num {
+    display: block; font-family: var(--font-display); font-size: 2.2rem;
+    color: var(--white); line-height: 1;
+  }
+  .hero-stat-label {
+    font-size: 0.68rem; color: rgba(255,255,255,0.65);
+    text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600;
+  }
+
+  .hero-scroll {
+    position: absolute; bottom: 3rem; left: 50%; transform: translateX(-50%);
+    z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 6px;
+    animation: fadeUp 0.9s 0.8s var(--ease) both;
+  }
+  .scroll-line {
+    width: 1px; height: 48px; background: rgba(255,255,255,0.3);
+    position: relative; overflow: hidden;
+  }
+  .scroll-line::after {
+    content: ''; position: absolute; top: -100%;
+    width: 100%; height: 100%; background: var(--green-light);
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+  @keyframes scrollLine {
+    0% { top: -100%; } 100% { top: 100%; }
+  }
+
+  /* ===== MARQUEE STRIP ===== */
+  .strip {
+    background: var(--blue-deep); color: var(--white);
+    padding: 14px 0; overflow: hidden;
+  }
+  .strip-track {
+    display: flex; gap: 4rem;
+    animation: marquee 30s linear infinite;
+    width: max-content;
+  }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .strip-item {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; white-space: nowrap;
+  }
+  .strip-dot { width: 4px; height: 4px; background: var(--green-light); border-radius: 50%; }
+
+  /* ===== SECTIONS ===== */
+  section { padding: 6rem 8%; }
+  .section-label {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.20em;
+    text-transform: uppercase; color: var(--green-dark);
+    display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;
+  }
+  .section-label::before {
+    content: ''; width: 28px; height: 2px; background: var(--green-light);
+  }
+  .section-title {
+    font-family: var(--font-display); font-size: clamp(1.9rem, 3.5vw, 3rem);
+    color: var(--blue-deep); line-height: 1.18; margin-bottom: 1.2rem;
+  }
+  .section-title em { font-style: italic; color: var(--green-dark); }
+  .section-sub {
+    font-size: 1.02rem; color: var(--text-light);
+    line-height: 1.75; max-width: 560px;
+  }
+
+  /* ===== ABOUT ===== */
+  #sobre {
+    background: var(--off-white);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+  }
+  .about-visual {
+    position: relative;
+  }
+  .about-card-main {
+    background: var(--blue-deep); border-radius: 24px;
+    padding: 3rem 2.5rem; color: var(--white);
+    position: relative; overflow: hidden;
+  }
+  .about-card-main::before {
+    content: ''; position: absolute; top: -40px; right: -40px;
+    width: 180px; height: 180px; border-radius: 50%;
+    background: rgba(122,196,112,0.12);
+  }
+  .about-card-main::after {
+    content: ''; position: absolute; bottom: -60px; left: -30px;
+    width: 220px; height: 220px; border-radius: 50%;
+    background: rgba(0,108,146,0.20);
+  }
+  .about-card-year {
+    font-family: var(--font-display); font-size: 5rem;
+    color: rgba(122,196,112,0.25); line-height: 1;
+    position: absolute; top: 1.5rem; right: 2rem;
+  }
+  .about-card-main h3 {
+    font-size: 1.1rem; font-weight: 700; margin-bottom: 0.6rem;
+    color: var(--green-light);
+  }
+  .about-card-main p {
+    font-size: 0.95rem; line-height: 1.7; color: rgba(255,255,255,0.85);
+    position: relative; z-index: 1;
+  }
+  .about-badge {
+    background: var(--green-light); color: var(--blue-deep);
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 20px; border-radius: 50px;
+    font-weight: 800; font-size: 0.78rem; letter-spacing: 0.05em;
+    margin-top: 1.5rem; position: relative; z-index: 1;
+  }
+  .about-floater {
+    position: absolute; bottom: -1.5rem; right: -1.5rem;
+    background: var(--white); border-radius: 18px; padding: 1.2rem 1.5rem;
+    box-shadow: var(--shadow-lg);
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .about-floater-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--green-light), var(--green-dark));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+  }
+  .about-floater-text strong {
+    display: block; font-size: 1.4rem; font-weight: 900; color: var(--blue-deep);
+  }
+  .about-floater-text span {
+    font-size: 0.72rem; color: var(--text-light); font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .about-content {}
+  .about-pillars {
+    margin-top: 2.5rem;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+  }
+  .pillar {
+    background: var(--white); border-radius: 16px;
+    padding: 1.4rem 1.2rem; border-left: 3px solid var(--green-light);
+    box-shadow: var(--shadow);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .pillar:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .pillar-icon { font-size: 1.6rem; margin-bottom: 0.6rem; }
+  .pillar h4 { font-size: 0.85rem; font-weight: 800; color: var(--blue-deep); margin-bottom: 0.3rem; }
+  .pillar p { font-size: 0.78rem; color: var(--text-light); line-height: 1.6; }
+
+  /* ===== SERVICES ===== */
+  #servicos { background: var(--white); }
+  .services-intro { max-width: 600px; margin-bottom: 3.5rem; }
+  .services-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem;
+  }
+  .service-card {
+    background: var(--off-white); border-radius: 20px;
+    padding: 2.2rem 1.8rem; position: relative; overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: default;
+  }
+  .service-card::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+    opacity: 0; transition: opacity 0.4s;
+    border-radius: 20px;
+  }
+  .service-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+  .service-card:hover::after { opacity: 1; }
+  .service-card > * { position: relative; z-index: 1; transition: color 0.3s; }
+  .service-card:hover h3,
+  .service-card:hover p,
+  .service-card:hover .service-tag { color: var(--white); }
+  .service-icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    background: linear-gradient(135deg, var(--blue-mid), var(--blue-deep));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; margin-bottom: 1.2rem;
+    transition: background 0.3s;
+  }
+  .service-card:hover .service-icon {
+    background: rgba(255,255,255,0.2);
+  }
+  .service-card h3 {
+    font-size: 1.05rem; font-weight: 800; color: var(--blue-deep);
+    margin-bottom: 0.6rem; line-height: 1.3;
+  }
+  .service-card p {
+    font-size: 0.82rem; color: var(--text-light); line-height: 1.65;
+    margin-bottom: 1rem;
+  }
+  .service-tag {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.10em;
+    text-transform: uppercase; color: var(--blue-mid);
+  }
+  .service-card-special {
+    grid-column: span 3;
+    background: var(--blue-deep); color: var(--white);
+    padding: 2.2rem 2.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 2rem;
+  }
+  .service-card-special::after { display: none; }
+  .service-card-special:hover { transform: translateY(-4px); }
+  .service-card-special h3 { color: var(--white); font-size: 1.2rem; }
+  .service-card-special p { color: rgba(255,255,255,0.75); }
+  .special-btn {
+    background: var(--green-light); color: var(--blue-deep);
+    padding: 12px 28px; border-radius: 50px;
+    font-weight: 800; font-size: 0.80rem; white-space: nowrap;
+    transition: background 0.3s, transform 0.2s;
+    cursor: pointer; border: none;
+  }
+  .special-btn:hover { background: var(--white); transform: scale(1.03); }
+
+  /* ===== EXAMS TICKER ===== */
+  .exams-section {
+    background: linear-gradient(135deg, var(--blue-deep) 0%, var(--blue-mid) 100%);
+    padding: 4rem 8%;
+    overflow: hidden;
+  }
+  .exams-label {
+    color: var(--green-light); font-size: 0.68rem; font-weight: 700;
+    letter-spacing: 0.20em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 10px; margin-bottom: 2rem;
+  }
+  .exams-label::before { content: ''; width: 28px; height: 2px; background: var(--green-light); }
+  .exams-label span { color: var(--white); }
+  .exams-track-wrap { overflow: hidden; }
+  .exams-track {
+    display: flex; gap: 1rem;
+    animation: marquee 40s linear infinite;
+    width: max-content;
+  }
+  .exam-pill {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.90); border-radius: 50px;
+    padding: 8px 18px; font-size: 0.75rem; font-weight: 600;
+    letter-spacing: 0.05em; white-space: nowrap;
+    transition: background 0.3s;
+  }
+  .exam-pill:hover { background: rgba(122,196,112,0.25); }
+
+  /* ===== FOUNDER ===== */
+  #equipe { background: var(--off-white); }
+  .founder-layout {
+    display: grid; grid-template-columns: auto 1fr; gap: 4rem; align-items: start;
+    max-width: 900px;
+  }
+  .founder-photo-wrap {
+    width: 260px; flex-shrink: 0;
+  }
+  .founder-photo-frame {
+    width: 260px; height: 320px; border-radius: 24px;
+    background: linear-gradient(160deg, var(--blue-mid), var(--blue-deep));
+    position: relative; overflow: hidden;
+    box-shadow: var(--shadow-lg);
+  }
+  .founder-photo-frame::before {
+    content: ''; position: absolute; top: 0; right: 0;
+    width: 80px; height: 80px; background: var(--green-light); opacity: 0.3;
+    border-radius: 0 0 0 80px;
+  }
+  .founder-photo-frame .photo-placeholder {
+    position: absolute; inset: 0; display: flex;
+    flex-direction: column; align-items: center; justify-content: flex-end;
+    padding-bottom: 1.5rem;
+  }
+  .founder-icon {
+    width: 90px; height: 90px; border-radius: 50%;
+    background: rgba(255,255,255,0.15); border: 3px solid rgba(255,255,255,0.30);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.8rem; margin-bottom: 0.8rem;
+  }
+  .founder-name-overlay {
+    text-align: center; color: rgba(255,255,255,0.95);
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .founder-badge-crm {
+    position: absolute; top: 1rem; left: 1rem;
+    background: var(--green-light); color: var(--blue-deep);
+    font-size: 0.65rem; font-weight: 800; padding: 5px 12px;
+    border-radius: 50px; letter-spacing: 0.06em;
+  }
+  .founder-info {}
+  .founder-info .section-label { margin-bottom: 0.5rem; }
+  .founder-name {
+    font-family: var(--font-display); font-size: 2rem;
+    color: var(--blue-deep); margin-bottom: 0.3rem; line-height: 1.2;
+  }
+  .founder-role {
+    font-size: 0.80rem; font-weight: 700; color: var(--green-dark);
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1.4rem;
+  }
+  .founder-crm {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--white); border: 1px solid rgba(0,108,146,0.20);
+    border-radius: 50px; padding: 6px 16px; font-size: 0.72rem;
+    font-weight: 700; color: var(--blue-mid); margin-bottom: 1.5rem;
+    box-shadow: var(--shadow);
+  }
+  .founder-bio {
+    font-size: 0.92rem; color: var(--text-light);
+    line-height: 1.80; margin-bottom: 1.5rem;
+  }
+  .founder-tags {
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+  }
+  .founder-tag {
+    background: rgba(0,108,146,0.08); color: var(--blue-mid);
+    border-radius: 50px; padding: 5px 14px;
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em;
+  }
+
+  /* ===== CONVENIOS ===== */
+  #convenios { background: var(--white); }
+  .convenios-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem; margin-top: 2.5rem;
+  }
+  .convenio-card {
+    background: var(--off-white); border-radius: 14px;
+    padding: 1.2rem 1rem; text-align: center;
+    border: 1.5px solid transparent;
+    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+  }
+  .convenio-card:hover {
+    border-color: var(--green-light); transform: translateY(-3px);
+    box-shadow: var(--shadow);
+  }
+  .convenio-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+  .convenio-name {
+    font-size: 0.72rem; font-weight: 800; color: var(--blue-deep);
+    letter-spacing: 0.05em; text-transform: uppercase; line-height: 1.4;
+  }
+  .convenio-type {
+    font-size: 0.64rem; color: var(--text-light); margin-top: 2px;
+    font-weight: 600;
+  }
+
+  /* ===== DEPOIMENTOS ===== */
+  #depoimentos {
+    background: linear-gradient(160deg, var(--blue-deep) 0%, #003a52 100%);
+    padding: 6rem 8%;
+  }
+  #depoimentos .section-label { color: var(--green-light); }
+  #depoimentos .section-label::before { background: var(--green-light); }
+  #depoimentos .section-title { color: var(--white); }
+  .testimonials-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem;
+    margin-top: 3rem;
+  }
+  .testimonial-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px; padding: 2rem 1.8rem;
+    transition: background 0.3s, transform 0.3s;
+  }
+  .testimonial-card:hover {
+    background: rgba(255,255,255,0.10); transform: translateY(-4px);
+  }
+  .testimonial-stars {
+    color: var(--green-light); font-size: 1rem; margin-bottom: 1rem;
+    letter-spacing: 2px;
+  }
+  .testimonial-text {
+    font-size: 0.90rem; color: rgba(255,255,255,0.85);
+    line-height: 1.75; font-style: italic; margin-bottom: 1.4rem;
+    font-family: var(--font-display);
+  }
+  .testimonial-author {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .testimonial-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--green-light), var(--green-dark));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem; font-weight: 800; color: var(--blue-deep); flex-shrink: 0;
+  }
+  .testimonial-name { font-size: 0.82rem; font-weight: 700; color: var(--white); }
+  .testimonial-source { font-size: 0.68rem; color: rgba(255,255,255,0.50); }
+
+  /* ===== CTA SECTION ===== */
+  .cta-section {
+    background: var(--green-dark);
+    padding: 5rem 8%;
+    display: grid; grid-template-columns: 1fr auto; gap: 3rem; align-items: center;
+  }
+  .cta-section h2 {
+    font-family: var(--font-display); font-size: 2.2rem;
+    color: var(--white); max-width: 540px; line-height: 1.25;
+  }
+  .cta-section p { color: rgba(255,255,255,0.80); margin-top: 0.8rem; font-size: 0.95rem; }
+  .btn-cta-white {
+    background: var(--white); color: var(--green-dark);
+    padding: 16px 36px; border-radius: 50px;
+    font-weight: 800; font-size: 0.90rem; letter-spacing: 0.05em; white-space: nowrap;
+    transition: transform 0.25s, box-shadow 0.25s;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.20);
+  }
+  .btn-cta-white:hover { transform: scale(1.04); box-shadow: 0 12px 40px rgba(0,0,0,0.28); }
+
+  /* ===== CONTACT ===== */
+  #contato {
+    background: var(--off-white);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem;
+  }
+  .contact-info {}
+  .contact-items { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1.2rem; }
+  .contact-item {
+    display: flex; align-items: flex-start; gap: 1rem;
+  }
+  .contact-icon {
+    width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+    background: rgba(0,108,146,0.10); display: flex; align-items: center;
+    justify-content: center; font-size: 1.1rem;
+  }
+  .contact-item-text strong {
+    display: block; font-size: 0.80rem; font-weight: 800;
+    color: var(--blue-deep); text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 2px;
+  }
+  .contact-item-text span, .contact-item-text a {
+    font-size: 0.90rem; color: var(--text-light);
+    line-height: 1.55; display: block;
+  }
+  .contact-item-text a:hover { color: var(--blue-mid); }
+  .whatsapp-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: #25D366; color: var(--white);
+    padding: 14px 28px; border-radius: 50px;
+    font-weight: 800; font-size: 0.88rem; margin-top: 2rem;
+    transition: transform 0.25s, box-shadow 0.25s;
+    box-shadow: 0 6px 24px rgba(37,211,102,0.35);
+  }
+  .whatsapp-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 32px rgba(37,211,102,0.45); }
+  .contact-hours {
+    background: var(--white); border-radius: 20px; padding: 2rem;
+    box-shadow: var(--shadow);
+  }
+  .contact-hours h3 {
+    font-size: 0.80rem; font-weight: 800; color: var(--blue-deep);
+    text-transform: uppercase; letter-spacing: 0.10em; margin-bottom: 1.2rem;
+  }
+  .hours-row {
+    display: flex; justify-content: space-between;
+    padding: 0.7rem 0; border-bottom: 1px solid rgba(0,0,0,0.06);
+    font-size: 0.85rem;
+  }
+  .hours-row:last-child { border-bottom: none; }
+  .hours-day { font-weight: 700; color: var(--text); }
+  .hours-time { color: var(--green-dark); font-weight: 600; }
+  .hours-time.closed { color: #999; }
+  .map-area {
+    background: var(--white); border-radius: 20px; overflow: hidden;
+    box-shadow: var(--shadow); height: 220px;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 1.5rem;
+    background: linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+    position: relative; cursor: pointer;
+    text-decoration: none;
+  }
+  .map-area:hover .map-overlay { opacity: 1; }
+  .map-content {
+    text-align: center; color: var(--white); padding: 2rem;
+    position: relative; z-index: 1;
+  }
+  .map-content p { font-size: 0.85rem; color: rgba(255,255,255,0.80); margin-top: 0.5rem; line-height: 1.6; }
+  .map-content strong { font-size: 1rem; display: block; }
+  .map-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--text); color: var(--white);
+    padding: 4rem 8% 2rem;
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem; margin-bottom: 3rem;
+  }
+  .footer-brand {}
+  .footer-logo-text {
+    font-family: var(--font-body); font-weight: 900; font-size: 1.4rem;
+    color: var(--white); letter-spacing: 0.05em; margin-bottom: 0.3rem;
+  }
+  .footer-logo-sub {
+    font-size: 0.65rem; color: var(--green-light); letter-spacing: 0.12em;
+    text-transform: uppercase; font-weight: 700; margin-bottom: 1.2rem;
+  }
+  .footer-desc { font-size: 0.82rem; color: rgba(255,255,255,0.55); line-height: 1.7; }
+  .footer-social { display: flex; gap: 0.8rem; margin-top: 1.5rem; }
+  .footer-social a {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: rgba(255,255,255,0.08); display: flex;
+    align-items: center; justify-content: center; font-size: 0.9rem;
+    transition: background 0.3s;
+  }
+  .footer-social a:hover { background: var(--green-dark); }
+  .footer-col h4 {
+    font-size: 0.72rem; font-weight: 800; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--white); margin-bottom: 1.2rem;
+  }
+  .footer-col ul li { margin-bottom: 0.6rem; }
+  .footer-col ul li a {
+    font-size: 0.82rem; color: rgba(255,255,255,0.55);
+    transition: color 0.3s;
+  }
+  .footer-col ul li a:hover { color: var(--green-light); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding-top: 1.5rem; display: flex;
+    justify-content: space-between; align-items: center;
+    font-size: 0.72rem; color: rgba(255,255,255,0.35);
+  }
+  .footer-bottom a { color: var(--green-light); }
+
+  /* ===== ZUMBIDO PAGE ===== */
+  .zumbido-hero {
+    background: var(--blue-deep); padding: 10rem 8% 6rem;
+    position: relative; overflow: hidden;
+  }
+  .zumbido-hero::before {
+    content: ''; position: absolute; top: -100px; right: -100px;
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(122,196,112,0.15), transparent 70%);
+  }
+  .zumbido-hero-content { max-width: 700px; position: relative; z-index: 1; }
+  .zumbido-hero .section-label { color: var(--green-light); }
+  .zumbido-hero .section-label::before { background: var(--green-light); }
+  .zumbido-hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    color: var(--white); line-height: 1.15; margin-bottom: 1.4rem;
+  }
+  .zumbido-hero h1 em { font-style: italic; color: var(--green-light); }
+  .zumbido-hero p {
+    font-size: 1.05rem; color: rgba(255,255,255,0.80);
+    line-height: 1.75; max-width: 560px; margin-bottom: 2.5rem;
+  }
+  .zumbido-wave {
+    position: absolute; bottom: 0; right: 8%;
+    font-size: 12rem; opacity: 0.05; color: var(--white);
+    line-height: 1; user-select: none;
+  }
+
+  .zumbido-stats {
+    background: var(--off-white); padding: 3rem 8%;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;
+  }
+  .z-stat {
+    text-align: center; padding: 1.5rem;
+    background: var(--white); border-radius: 18px; box-shadow: var(--shadow);
+  }
+  .z-stat-num {
+    font-family: var(--font-display); font-size: 2.8rem;
+    color: var(--blue-deep); line-height: 1;
+  }
+  .z-stat-unit { font-size: 1rem; color: var(--green-dark); }
+  .z-stat-desc {
+    font-size: 0.78rem; color: var(--text-light); margin-top: 0.3rem;
+    font-weight: 600; letter-spacing: 0.04em;
+  }
+
+  .zumbido-content {
+    padding: 5rem 8%; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem;
+    align-items: start; background: var(--white);
+  }
+  .zumbido-types h3 {
+    font-size: 1.2rem; font-weight: 800; color: var(--blue-deep); margin-bottom: 1.5rem;
+  }
+  .type-card {
+    background: var(--off-white); border-radius: 16px;
+    padding: 1.4rem 1.5rem; margin-bottom: 1rem;
+    border-left: 4px solid var(--blue-mid);
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .type-card:hover { border-color: var(--green-light); box-shadow: var(--shadow); }
+  .type-card h4 { font-size: 0.92rem; font-weight: 800; color: var(--blue-deep); margin-bottom: 0.4rem; }
+  .type-card p { font-size: 0.82rem; color: var(--text-light); line-height: 1.6; }
+
+  .zumbido-treatment {}
+  .zumbido-treatment h3 {
+    font-size: 1.2rem; font-weight: 800; color: var(--blue-deep); margin-bottom: 1.5rem;
+  }
+  .treatment-step {
+    display: flex; gap: 1.2rem; margin-bottom: 1.5rem; align-items: flex-start;
+  }
+  .step-num {
+    width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+    background: var(--blue-deep); color: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-size: 1.1rem;
+  }
+  .step-content h4 {
+    font-size: 0.90rem; font-weight: 800; color: var(--blue-deep); margin-bottom: 0.3rem;
+  }
+  .step-content p { font-size: 0.80rem; color: var(--text-light); line-height: 1.6; }
+
+  .zumbido-faq { background: var(--off-white); padding: 5rem 8%; }
+  .zumbido-faq h2 {
+    font-family: var(--font-display); font-size: 2rem;
+    color: var(--blue-deep); margin-bottom: 2rem;
+  }
+  .faq-item {
+    border-bottom: 1px solid rgba(0,0,0,0.08); overflow: hidden;
+  }
+  .faq-q {
+    width: 100%; text-align: left; background: none; border: none;
+    padding: 1.2rem 0; cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.95rem; font-weight: 700; color: var(--blue-deep);
+    font-family: var(--font-body);
+  }
+  .faq-q:hover { color: var(--green-dark); }
+  .faq-icon {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--off-white); display: flex;
+    align-items: center; justify-content: center; flex-shrink: 0;
+    font-size: 1rem; color: var(--blue-mid);
+    transition: transform 0.3s, background 0.3s;
+  }
+  .faq-item.open .faq-icon { transform: rotate(45deg); background: var(--green-light); color: var(--blue-deep); }
+  .faq-a {
+    max-height: 0; overflow: hidden; transition: max-height 0.4s var(--ease), padding 0.4s;
+    font-size: 0.88rem; color: var(--text-light); line-height: 1.75;
+  }
+  .faq-item.open .faq-a { max-height: 200px; padding-bottom: 1.2rem; }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ===== FLOATING WHATSAPP ===== */
+  .float-wa {
+    position: fixed; bottom: 2rem; right: 2rem; z-index: 9999;
+    display: flex; flex-direction: column; align-items: flex-end; gap: 0.8rem;
+  }
+  .float-wa-bubble {
+    background: var(--white); border-radius: 14px;
+    padding: 0.8rem 1.2rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    font-size: 0.80rem; font-weight: 700; color: var(--text);
+    white-space: nowrap; opacity: 0; transform: translateX(12px);
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+    border-left: 3px solid #25D366;
+  }
+  .float-wa:hover .float-wa-bubble {
+    opacity: 1; transform: translateX(0);
+  }
+  .float-wa-btn {
+    width: 58px; height: 58px; border-radius: 50%;
+    background: #25D366;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 6px 28px rgba(37,211,102,0.50);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    animation: waPulse 2.5s ease-in-out infinite;
+  }
+  .float-wa-btn:hover {
+    transform: scale(1.12);
+    box-shadow: 0 10px 36px rgba(37,211,102,0.65);
+    animation: none;
+  }
+  .float-wa-btn svg { width: 30px; height: 30px; }
+  @keyframes waPulse {
+    0%,100% { box-shadow: 0 6px 28px rgba(37,211,102,0.50); }
+    50%      { box-shadow: 0 6px 28px rgba(37,211,102,0.50), 0 0 0 12px rgba(37,211,102,0.12); }
+  }
+  .float-wa-dot {
+    position: absolute; top: 4px; right: 4px;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: #ff3b30; border: 2px solid var(--white);
+    animation: blink 2s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1024px) {
+    #sobre { grid-template-columns: 1fr; }
+    .services-grid { grid-template-columns: repeat(2, 1fr); }
+    .service-card-special { grid-column: span 2; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .zumbido-stats { grid-template-columns: repeat(2, 1fr); }
+    .zumbido-content { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 768px) {
+    nav { padding: 0 5%; }
+    .nav-links { display: none; }
+    .nav-links.open {
+      display: flex; flex-direction: column; align-items: flex-start;
+      position: fixed; top: 72px; left: 0; right: 0;
+      background: var(--white); padding: 1.5rem 5%; gap: 1rem;
+      box-shadow: var(--shadow-lg);
+    }
+    .nav-hamburger { display: flex; }
+    section { padding: 4rem 5%; }
+    .hero-stats { display: none; }
+    .services-grid { grid-template-columns: 1fr; }
+    .service-card-special { grid-column: span 1; flex-direction: column; }
+    #contato { grid-template-columns: 1fr; }
+    .founder-layout { grid-template-columns: 1fr; }
+    .cta-section { grid-template-columns: 1fr; text-align: center; }
+    .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
+    .about-pillars { grid-template-columns: 1fr; }
+    .zumbido-stats { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== FLOATING WHATSAPP ===== -->
+<div class="float-wa" id="floatWa">
+  <div class="float-wa-bubble">💬 Agendar pelo WhatsApp</div>
+  <a href="https://wa.me/5527996202080" target="_blank" class="float-wa-btn" aria-label="WhatsApp COFE" style="position:relative;text-decoration:none;">
+    <div class="float-wa-dot"></div>
+    <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+</div>
+
+
+<!-- ===== NAVIGATION ===== -->
+<nav id="navbar">
+  <div class="nav-logo" onclick="goHome()">
+    <!-- SVG Logo baseado no Manual COFE -->
+    <svg viewBox="0 0 80 60" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <clipPath id="cClip"><path d="M10,5 A28,28,0,1,0,10,55 L10,45 A18,18,0,1,1,10,15 Z"/></clipPath>
+      </defs>
+      <!-- C shape -->
+      <path d="M10,5 A28,28,0,1,0,10,55 L10,47 A20,20,0,1,1,10,13 Z" fill="#005575"/>
+      <!-- Wave lines -->
+      <line x1="14" y1="20" x2="50" y2="20" stroke="#7AC470" stroke-width="3.5" stroke-linecap="round" clip-path="url(#cClip)"/>
+      <line x1="10" y1="30" x2="50" y2="30" stroke="#006C92" stroke-width="3.5" stroke-linecap="round" clip-path="url(#cClip)"/>
+      <line x1="14" y1="40" x2="50" y2="40" stroke="#7AC470" stroke-width="3.5" stroke-linecap="round" clip-path="url(#cClip)"/>
+      <!-- Semicircle left -->
+      <path d="M10,22 A8,8,0,0,0,10,38 Z" fill="#006C92"/>
+    </svg>
+    <div class="nav-logo-text">
+      <span>COFE</span>
+      <span>Centro de Otorrino e Fonoaudiologia</span>
+    </div>
+  </div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#sobre" onclick="goHome()">Sobre</a></li>
+    <li><a href="#servicos" onclick="goHome()">Serviços</a></li>
+    <li><a href="#equipe" onclick="goHome()">Fundadora</a></li>
+    <li><a href="#convenios" onclick="goHome()">Convênios</a></li>
+    <li><a href="#" onclick="showPage('zumbido'); return false;">Zumbido</a></li>
+    <li><a href="#contato" onclick="goHome()" class="btn-nav">Agendar</a></li>
+  </ul>
+  <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ============================= -->
+<!-- ===== HOME PAGE ===== -->
+<!-- ============================= -->
+<div id="page-home" class="page active">
+
+  <!-- HERO -->
+  <section class="hero" style="padding:0;">
+    <div class="hero-video-wrap">
+      <video autoplay muted loop playsinline
+        style="width:100%;height:100%;object-fit:cover;opacity:0.22;filter:saturate(0.6);"
+        oncanplay="this.style.opacity='0.22'">
+        <source src="SITE%20COFE/video_cofe.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Vila Velha, ES — Fundado em 2009</div>
+      <h1>Ouvir. Falar. <em>Viver</em><br>com Plenitude.</h1>
+      <p class="hero-sub">Centro de referência em Otorrinolaringologia e Fonoaudiologia Especializada na Grande Vitória. Tecnologia de ponta, diagnóstico preciso e cuidado que transforma vidas.</p>
+      <div class="hero-actions">
+        <a href="https://wa.me/5527996202080" target="_blank" class="btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Agendar Consulta
+        </a>
+        <a href="#sobre" class="btn-ghost" onclick="document.getElementById('sobre').scrollIntoView({behavior:'smooth'});return false;">
+          Conheça o COFE →
+        </a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hero-stat-num">+700</span>
+        <span class="hero-stat-label">Atendimentos/Trimestre</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">+20</span>
+        <span class="hero-stat-label">Tipos de Exames</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">16</span>
+        <span class="hero-stat-label">Anos de Excelência</span>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="strip">
+    <div class="strip-track">
+      <div class="strip-item"><div class="strip-dot"></div>Otorrinolaringologia</div>
+      <div class="strip-item"><div class="strip-dot"></div>Fonoaudiologia</div>
+      <div class="strip-item"><div class="strip-dot"></div>Audiometria</div>
+      <div class="strip-item"><div class="strip-dot"></div>Zumbido</div>
+      <div class="strip-item"><div class="strip-dot"></div>Vectoeletronistagmografia</div>
+      <div class="strip-item"><div class="strip-dot"></div>BERA</div>
+      <div class="strip-item"><div class="strip-dot"></div>Videoendoscopia</div>
+      <div class="strip-item"><div class="strip-dot"></div>Otoemissões Acústicas</div>
+      <div class="strip-item"><div class="strip-dot"></div>Acufenometria</div>
+      <div class="strip-item"><div class="strip-dot"></div>Impedanciometria</div>
+      <!-- duplicar para loop -->
+      <div class="strip-item"><div class="strip-dot"></div>Otorrinolaringologia</div>
+      <div class="strip-item"><div class="strip-dot"></div>Fonoaudiologia</div>
+      <div class="strip-item"><div class="strip-dot"></div>Audiometria</div>
+      <div class="strip-item"><div class="strip-dot"></div>Zumbido</div>
+      <div class="strip-item"><div class="strip-dot"></div>Vectoeletronistagmografia</div>
+      <div class="strip-item"><div class="strip-dot"></div>BERA</div>
+      <div class="strip-item"><div class="strip-dot"></div>Videoendoscopia</div>
+      <div class="strip-item"><div class="strip-dot"></div>Otoemissões Acústicas</div>
+      <div class="strip-item"><div class="strip-dot"></div>Acufenometria</div>
+      <div class="strip-item"><div class="strip-dot"></div>Impedanciometria</div>
+    </div>
+  </div>
+
+  <!-- SOBRE -->
+  <section id="sobre">
+    <div class="about-visual reveal">
+      <div class="about-card-main">
+        <div class="about-card-year">2009</div>
+        <h3>Nossa Origem</h3>
+        <p>O COFE nasceu da visão de integrar Otorrinolaringologia e Fonoaudiologia em um único processo de cuidado — tornando o atendimento ao paciente um ato único, contínuo e altamente especializado. Uma parceria que se transformou em referência na Grande Vitória.</p>
+        <div class="about-badge">
+          🏆 Referência na Grande Vitória
+        </div>
+      </div>
+      <div class="about-floater">
+        <div class="about-floater-icon">🎓</div>
+        <div class="about-floater-text">
+          <strong>+16</strong>
+          <span>Anos de Excelência</span>
+        </div>
+      </div>
+    </div>
+    <div class="about-content">
+      <div class="section-label">Sobre o COFE</div>
+      <h2 class="section-title">Integração única entre <em>audição</em> e comunicação</h2>
+      <p class="section-sub">Buscamos a excelência no diagnóstico e tratamento das condições relacionadas ao ouvir e ao falar. Com equipamentos de alta tecnologia e intercâmbio com os maiores centros nacionais e internacionais, seu cuidado está em mãos especializadas.</p>
+      <div class="about-pillars">
+        <div class="pillar reveal reveal-delay-1">
+          <div class="pillar-icon">🔬</div>
+          <h4>Alta Tecnologia</h4>
+          <p>Equipamentos de diagnóstico de última geração para precisão máxima.</p>
+        </div>
+        <div class="pillar reveal reveal-delay-2">
+          <div class="pillar-icon">🔗</div>
+          <h4>Integração Especializada</h4>
+          <p>Otorrino e Fono em sinergia — o paciente é o maior beneficiado.</p>
+        </div>
+        <div class="pillar reveal reveal-delay-3">
+          <div class="pillar-icon">🌎</div>
+          <h4>Intercâmbio Internacional</h4>
+          <p>Conexão com grandes centros diagnósticos nacionais e internacionais.</p>
+        </div>
+        <div class="pillar reveal reveal-delay-4">
+          <div class="pillar-icon">🤝</div>
+          <h4>Cuidado Humanizado</h4>
+          <p>Atendimento individualizado com foco no bem-estar físico e social.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVIÇOS -->
+  <section id="servicos">
+    <div class="services-intro reveal">
+      <div class="section-label">Especialidades & Serviços</div>
+      <h2 class="section-title">Cuidado completo do <em>ouvido, nariz e garganta</em></h2>
+      <p class="section-sub">Da consulta especializada ao exame mais sofisticado — tudo em um único lugar, com a qualidade que você merece.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal reveal-delay-1">
+        <div class="service-icon">👂</div>
+        <h3>Otorrinolaringologia</h3>
+        <p>Diagnóstico e tratamento de doenças do ouvido, nariz, garganta, cabeça e pescoço. Consultas com especialistas de excelência técnica e científica.</p>
+        <div class="service-tag">Consulta Especializada</div>
+      </div>
+      <div class="service-card reveal reveal-delay-2">
+        <div class="service-icon">🗣️</div>
+        <h3>Fonoaudiologia</h3>
+        <p>Avaliação e terapia da voz, fala, linguagem e deglutição. Complementação perfeita ao cuidado otorrinolaringológico com abordagem integrada.</p>
+        <div class="service-tag">Terapia & Avaliação</div>
+      </div>
+      <div class="service-card reveal reveal-delay-3">
+        <div class="service-icon">📊</div>
+        <h3>Audiometria Completa</h3>
+        <p>Audiometria tonal, vocal, de altas frequências e condicionada. Avaliação auditiva precisa para todas as faixas etárias, incluindo teste da orelhinha.</p>
+        <div class="service-tag">Diagnóstico Auditivo</div>
+      </div>
+      <div class="service-card reveal reveal-delay-1">
+        <div class="service-icon">⚖️</div>
+        <h3>Avaliação do Equilíbrio</h3>
+        <p>Vectoeletronistagmografia, provas calóricas e pesquisa de pares cranianos. Diagnóstico completo de tonturas, vertigens e distúrbios vestibulares.</p>
+        <div class="service-tag">Vestibulometria</div>
+      </div>
+      <div class="service-card reveal reveal-delay-2">
+        <div class="service-icon">🎯</div>
+        <h3>BERA & Potenciais</h3>
+        <p>Potencial evocado auditivo de tronco encefálico (BERA), otoemissões acústicas e audiometria de altas frequências para avaliação neurológica da audição.</p>
+        <div class="service-tag">Eletrofisiologia</div>
+      </div>
+      <div class="service-card reveal reveal-delay-3">
+        <div class="service-icon">🔭</div>
+        <h3>Videoendoscopia</h3>
+        <p>Videoendoscopia nasossinusal rígida e flexível, faringo-laringoscopia e videolaringoestroboscopia para diagnóstico preciso das vias aéreas superiores.</p>
+        <div class="service-tag">Endoscopia Especializada</div>
+      </div>
+      <div class="service-card service-card-special reveal">
+        <div>
+          <h3>Tratamento Especializado de Zumbido (Acúfeno)</h3>
+          <p>Protocolo diagnóstico completo com acufenometria, pesquisa de LDL e abordagem terapêutica integrada. Referência no tratamento do zumbido na Grande Vitória.</p>
+        </div>
+        <button class="special-btn" onclick="showPage('zumbido')">Saiba Mais →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXAMES -->
+  <div class="exams-section">
+    <div class="exams-label"><span>Exames Realizados no COFE</span></div>
+    <div class="exams-track-wrap">
+      <div class="exams-track">
+        <div class="exam-pill">Audiometria Tonal</div>
+        <div class="exam-pill">Audiometria Vocal SRT</div>
+        <div class="exam-pill">Impedanciometria</div>
+        <div class="exam-pill">Provas de Função Tubária</div>
+        <div class="exam-pill">Vectoeletronistagmografia</div>
+        <div class="exam-pill">Provas Calóricas</div>
+        <div class="exam-pill">BERA Via Auditiva</div>
+        <div class="exam-pill">Otoemissões Transientes</div>
+        <div class="exam-pill">Otoemissões por Distorção</div>
+        <div class="exam-pill">P300</div>
+        <div class="exam-pill">Acufenometria</div>
+        <div class="exam-pill">Audiometria Altas Frequências</div>
+        <div class="exam-pill">Pesquisa LDL</div>
+        <div class="exam-pill">Videoendoscopia Nasossinusal</div>
+        <div class="exam-pill">Videolaringoestroboscopia</div>
+        <div class="exam-pill">Videofaringolaringoscopia</div>
+        <div class="exam-pill">Fenômeno de Túlio</div>
+        <div class="exam-pill">Nistagmo Pendular</div>
+        <div class="exam-pill">Nistagmo Optoquinético</div>
+        <!-- dup -->
+        <div class="exam-pill">Audiometria Tonal</div>
+        <div class="exam-pill">Audiometria Vocal SRT</div>
+        <div class="exam-pill">Impedanciometria</div>
+        <div class="exam-pill">Provas de Função Tubária</div>
+        <div class="exam-pill">Vectoeletronistagmografia</div>
+        <div class="exam-pill">Provas Calóricas</div>
+        <div class="exam-pill">BERA Via Auditiva</div>
+        <div class="exam-pill">Otoemissões Transientes</div>
+        <div class="exam-pill">Otoemissões por Distorção</div>
+        <div class="exam-pill">Acufenometria</div>
+        <div class="exam-pill">Audiometria Altas Frequências</div>
+        <div class="exam-pill">Videoendoscopia Nasossinusal</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FUNDADORA -->
+  <section id="equipe">
+    <div class="section-label">Nossa Fundadora</div>
+    <h2 class="section-title reveal">Liderança com <em>autoridade</em> e excelência</h2>
+    <div class="founder-layout" style="margin-top:3rem;">
+      <div class="founder-photo-wrap reveal">
+        <div class="founder-photo-frame">
+          <div class="founder-badge-crm">CRM-ES 6404</div>
+          <div class="photo-placeholder">
+            <div class="founder-icon">👩‍⚕️</div>
+            <div class="founder-name-overlay">Dra. Aline Farrás<br>Abu Kamel</div>
+          </div>
+        </div>
+      </div>
+      <div class="founder-info reveal reveal-delay-2">
+        <div class="section-label">Diretora Técnica & Fundadora</div>
+        <h3 class="founder-name">Dra. Aline Farrás<br>Abu Kamel</h3>
+        <div class="founder-role">Otorrinolaringologista — RQE 5267</div>
+        <div class="founder-crm">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          CRM-ES 6404 · RQE 5267 · Otorrinolaringologia
+        </div>
+        <p class="founder-bio">Fundadora e Diretora Técnica do COFE desde 2009, a Dra. Aline Farrás construiu ao longo de mais de 16 anos uma trajetória de excelência no diagnóstico e tratamento das doenças do ouvido, nariz e garganta. Especialista em otorrinolaringologia com vasta experiência em zumbido, tontura, surdez e audiometrias, conduz pessoalmente os casos mais complexos e mantém intercâmbio ativo com centros de referência nacionais e internacionais. Sua visão integrada entre a otorrino e a fonoaudiologia é o alicerce do modelo de cuidado único que diferencia o COFE na Grande Vitória.</p>
+        <div class="founder-tags">
+          <span class="founder-tag">Zumbido</span>
+          <span class="founder-tag">Tontura & Vertigem</span>
+          <span class="founder-tag">Surdez</span>
+          <span class="founder-tag">Audiometria</span>
+          <span class="founder-tag">Otologia</span>
+          <span class="founder-tag">Rinologia</span>
+          <span class="founder-tag">Laringologia</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONVÊNIOS -->
+  <section id="convenios" style="background:var(--white);">
+    <div class="section-label reveal">Convênios & Parcerias</div>
+    <h2 class="section-title reveal">Atendemos os <em>principais planos</em> de saúde</h2>
+    <p class="section-sub reveal" style="margin-bottom:0;">Consulta particular disponível para todos os pacientes.</p>
+    <div class="convenios-grid">
+      <div class="convenio-card reveal reveal-delay-1">
+        <div class="convenio-icon">🏥</div>
+        <div class="convenio-name">MedSenior</div>
+        <div class="convenio-type">Convênio</div>
+      </div>
+      <div class="convenio-card reveal reveal-delay-1">
+        <div class="convenio-icon">🏥</div>
+        <div class="convenio-name">Unimed</div>
+        <div class="convenio-type">Consultas Selecionadas + Exames</div>
+      </div>
+      <div class="convenio-card reveal reveal-delay-2">
+        <div class="convenio-icon">🏥</div>
+        <div class="convenio-name">Santa Casa Saúde</div>
+        <div class="convenio-type">Convênio</div>
+      </div>
+      <div class="convenio-card reveal reveal-delay-2">
+        <div class="convenio-icon">🏥</div>
+        <div class="convenio-name">SAMP / São Bernardo</div>
+        <div class="convenio-type">Convênio</div>
+      </div>
+      <div class="convenio-card reveal reveal-delay-3">
+        <div class="convenio-icon">🏥</div>
+        <div class="convenio-name">Petrobras Saúde</div>
+        <div class="convenio-type">Dra. Aline + Exames</div>
+      </div>
+      <div class="convenio-card reveal reveal-delay-3">
+        <div class="convenio-icon">🏥</div>
+        <div class="convenio-name">CASSI</div>
+        <div class="convenio-type">Convênio</div>
+      </div>
+      <div class="convenio-card reveal reveal-delay-1">
+        <div class="convenio-icon">🏥</div>
+        <div class="convenio-name">AFPES</div>
+        <div class="convenio-type">Parceria</div>
+      </div>
+      <div class="convenio-card reveal reveal-delay-2">
+        <div class="convenio-icon">🏥</div>
+        <div class="convenio-name">Amor Saúde</div>
+        <div class="convenio-type">Parceria</div>
+      </div>
+      <div class="convenio-card reveal reveal-delay-3">
+        <div class="convenio-icon">🏥</div>
+        <div class="convenio-name">Postal Saúde</div>
+        <div class="convenio-type">Convênio</div>
+      </div>
+      <div class="convenio-card reveal reveal-delay-1">
+        <div class="convenio-icon">🏥</div>
+        <div class="convenio-name">GEAP</div>
+        <div class="convenio-type">Convênio</div>
+      </div>
+      <div class="convenio-card reveal reveal-delay-2">
+        <div class="convenio-icon">🏥</div>
+        <div class="convenio-name">Marinha do Brasil</div>
+        <div class="convenio-type">Convênio</div>
+      </div>
+      <div class="convenio-card reveal reveal-delay-3">
+        <div class="convenio-icon">💳</div>
+        <div class="convenio-name">Particular</div>
+        <div class="convenio-type">Todos os Médicos</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEPOIMENTOS -->
+  <section id="depoimentos" style="padding:6rem 8%;">
+    <div class="section-label">Depoimentos</div>
+    <h2 class="section-title">O que nossos <em>pacientes</em> dizem</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal reveal-delay-1">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"Atendimento excepcional. A Dra. Aline é muito atenciosa e detalhista. Realizei vários exames e a equipe é extremamente competente. O diagnóstico foi preciso e o tratamento funcionou. Recomendo a todos."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">M</div>
+          <div>
+            <div class="testimonial-name">Maria C.</div>
+            <div class="testimonial-source">Google Negócios ⭐ 5/5</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal reveal-delay-2">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"Sofria com zumbido há anos sem conseguir tratamento adequado. No COFE realizaram uma avaliação completa que nenhum outro lugar havia feito. Finalmente estou em tratamento e já sinto melhora significativa."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">R</div>
+          <div>
+            <div class="testimonial-name">Roberto A.</div>
+            <div class="testimonial-source">Google Negócios ⭐ 5/5</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal reveal-delay-3">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"Clínica de alto nível em Vila Velha. Estrutura moderna, equipe acolhedora e profissional. A integração entre otorrino e fonoaudiologia faz toda a diferença no diagnóstico. Confio plenamente no COFE."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">A</div>
+          <div>
+            <div class="testimonial-name">Ana Paula S.</div>
+            <div class="testimonial-source">Google Negócios ⭐ 5/5</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="cta-section reveal">
+    <div>
+      <h2>Cuide da sua saúde auditiva hoje.</h2>
+      <p>Agende sua consulta e descubra por que o COFE é referência em Otorrinolaringologia e Fonoaudiologia na Grande Vitória.</p>
+    </div>
+    <a href="https://wa.me/5527996202080" target="_blank" class="btn-cta-white">Agendar pelo WhatsApp</a>
+  </div>
+
+  <!-- CONTATO -->
+  <section id="contato">
+    <div class="contact-info">
+      <div class="section-label">Contato & Localização</div>
+      <h2 class="section-title reveal">Fale <em>conosco</em></h2>
+      <div class="contact-items">
+        <div class="contact-item reveal">
+          <div class="contact-icon">📍</div>
+          <div class="contact-item-text">
+            <strong>Endereço</strong>
+            <span>Rua Cabo Aylson Simões, 560<br>Ed. Antônio Saliba, Sala 103 — Centro<br>Vila Velha — ES · CEP 29.100-320</span>
+          </div>
+        </div>
+        <div class="contact-item reveal">
+          <div class="contact-icon">📞</div>
+          <div class="contact-item-text">
+            <strong>Telefone</strong>
+            <a href="tel:+552730622080">(27) 3062-2080</a>
+            <a href="tel:+552730620403">(27) 3062-0403</a>
+          </div>
+        </div>
+        <div class="contact-item reveal">
+          <div class="contact-icon">💬</div>
+          <div class="contact-item-text">
+            <strong>WhatsApp Agendamento</strong>
+            <a href="https://wa.me/5527996202080" target="_blank">(27) 99620-2080</a>
+          </div>
+        </div>
+        <div class="contact-item reveal">
+          <div class="contact-icon">✉️</div>
+          <div class="contact-item-text">
+            <strong>E-mail</strong>
+            <a href="mailto:recepcaocofe@hotmail.com">recepcaocofe@hotmail.com</a>
+          </div>
+        </div>
+      </div>
+      <a href="https://wa.me/5527996202080" target="_blank" class="whatsapp-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Agendar pelo WhatsApp
+      </a>
+    </div>
+    <div>
+      <div class="contact-hours reveal">
+        <h3>⏰ Horário de Atendimento</h3>
+        <div class="hours-row"><span class="hours-day">Segunda-feira</span><span class="hours-time">08h00 – 18h00</span></div>
+        <div class="hours-row"><span class="hours-day">Terça-feira</span><span class="hours-time">08h00 – 18h00</span></div>
+        <div class="hours-row"><span class="hours-day">Quarta-feira</span><span class="hours-time">08h00 – 18h00</span></div>
+        <div class="hours-row"><span class="hours-day">Quinta-feira</span><span class="hours-time">08h00 – 18h00</span></div>
+        <div class="hours-row"><span class="hours-day">Sexta-feira</span><span class="hours-time">08h00 – 17h00</span></div>
+        <div class="hours-row"><span class="hours-day">Sábado</span><span class="hours-time closed">Fechado</span></div>
+        <div class="hours-row"><span class="hours-day">Domingo</span><span class="hours-time closed">Fechado</span></div>
+      </div>
+      <a href="https://maps.google.com/?q=Rua+Cabo+Aylson+Simoes+560+Vila+Velha+ES" target="_blank" class="map-area reveal">
+        <div class="map-content">
+          <div class="map-icon">📍</div>
+          <strong>Ver no Google Maps</strong>
+          <p>Rua Cabo Aylson Simões, 560<br>Ed. Antônio Saliba, Sala 103<br>Centro — Vila Velha, ES</p>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo-text">COFE</div>
+        <div class="footer-logo-sub">Centro de Otorrinolaringologia e Fonoaudiologia Especializada</div>
+        <p class="footer-desc">Referência em diagnóstico e tratamento das doenças do ouvido, nariz e garganta na Grande Vitória, Espírito Santo. Fundado em 2009 pela Dra. Aline Farrás Abu Kamel.</p>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/cofe_centrodeotorrinoefono" target="_blank" aria-label="Instagram">📸</a>
+          <a href="https://www.facebook.com/cofecentrodeotorrinoefono" target="_blank" aria-label="Facebook">👥</a>
+          <a href="https://wa.me/5527996202080" target="_blank" aria-label="WhatsApp">💬</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Navegação</h4>
+        <ul>
+          <li><a href="#sobre">Sobre o COFE</a></li>
+          <li><a href="#servicos">Serviços</a></li>
+          <li><a href="#equipe">Fundadora</a></li>
+          <li><a href="#convenios">Convênios</a></li>
+          <li><a href="#" onclick="showPage('zumbido');return false;">Zumbido</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Especialidades</h4>
+        <ul>
+          <li><a href="#servicos">Otorrinolaringologia</a></li>
+          <li><a href="#servicos">Fonoaudiologia</a></li>
+          <li><a href="#servicos">Audiometria</a></li>
+          <li><a href="#servicos">Vestibulometria</a></li>
+          <li><a href="#" onclick="showPage('zumbido');return false;">Zumbido</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contato</h4>
+        <ul>
+          <li><a href="tel:+552730622080">(27) 3062-2080</a></li>
+          <li><a href="tel:+552730620403">(27) 3062-0403</a></li>
+          <li><a href="https://wa.me/5527996202080" target="_blank">WhatsApp</a></li>
+          <li><a href="mailto:recepcaocofe@hotmail.com">E-mail</a></li>
+          <li><a href="http://www.cofeonline.com.br" target="_blank">cofeonline.com.br</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 COFE — Centro de Otorrinolaringologia e Fonoaudiologia Especializada. Todos os direitos reservados.</span>
+      <span>Vila Velha, Espírito Santo</span>
+    </div>
+  </footer>
+
+</div><!-- /page-home -->
+
+
+<!-- ============================= -->
+<!-- ===== ZUMBIDO PAGE ===== -->
+<!-- ============================= -->
+<div id="page-zumbido" class="page">
+
+  <!-- ZUMBIDO HERO -->
+  <div class="zumbido-hero">
+    <div class="zumbido-hero-content">
+      <div class="section-label">Especialidade COFE</div>
+      <h1>Zumbido no ouvido: <em>diagnóstico</em> e tratamento especializado</h1>
+      <p>O zumbido (acúfeno) afeta milhões de brasileiros e pode comprometer profundamente a qualidade de vida. No COFE, oferecemos protocolo diagnóstico completo e abordagem terapêutica integrativa — com a expertise de mais de 16 anos de experiência.</p>
+      <a href="https://wa.me/5527996202080" target="_blank" class="btn-primary">
+        Agendar Avaliação de Zumbido
+      </a>
+    </div>
+    <div class="zumbido-wave">〜〜〜</div>
+  </div>
+
+  <!-- STATS ZUMBIDO -->
+  <div class="zumbido-stats">
+    <div class="z-stat reveal">
+      <div class="z-stat-num">17<span class="z-stat-unit">%</span></div>
+      <div class="z-stat-desc">Da população adulta brasileira afetada pelo zumbido</div>
+    </div>
+    <div class="z-stat reveal reveal-delay-1">
+      <div class="z-stat-num">40<span class="z-stat-unit">M+</span></div>
+      <div class="z-stat-desc">De brasileiros convivem com algum grau de zumbido</div>
+    </div>
+    <div class="z-stat reveal reveal-delay-2">
+      <div class="z-stat-num">80<span class="z-stat-unit">%</span></div>
+      <div class="z-stat-desc">Dos casos têm origem otológica diagnosticável</div>
+    </div>
+    <div class="z-stat reveal reveal-delay-3">
+      <div class="z-stat-num">+16</div>
+      <div class="z-stat-desc">Anos de experiência no tratamento do COFE</div>
+    </div>
+  </div>
+
+  <!-- CONTEÚDO ZUMBIDO -->
+  <div class="zumbido-content">
+    <div class="zumbido-types">
+      <h3>O que é o Zumbido?</h3>
+      <p style="font-size:0.92rem;color:var(--text-light);line-height:1.75;margin-bottom:1.5rem;">O zumbido, tecnicamente denominado <strong>acúfeno</strong>, é a percepção de sons (como apitos, chiados, cliques, batimentos) na ausência de fonte sonora externa. Não é uma doença em si, mas um sintoma que pode indicar diversas condições subjacentes que exigem investigação especializada.</p>
+
+      <div class="type-card">
+        <h4>🔊 Zumbido Subjetivo</h4>
+        <p>O mais comum — perceptível apenas pelo paciente. Geralmente originado no sistema auditivo ou nervoso. Associado a perda auditiva, trauma sonoro ou condições neurológicas.</p>
+      </div>
+      <div class="type-card">
+        <h4>🫀 Zumbido Pulsátil</h4>
+        <p>Sincronizado com o batimento cardíaco. Pode indicar alterações vasculares, hipertensão ou outras condições sistêmicas que requerem investigação médica específica.</p>
+      </div>
+      <div class="type-card">
+        <h4>👁️ Zumbido Objetivo</h4>
+        <p>Raro — pode ser ouvido também pelo examinador. Geralmente originado de estruturas anatômicas próximas ao ouvido como músculos, articulações ou vasos sanguíneos.</p>
+      </div>
+      <div class="type-card">
+        <h4>😰 Hiperacusia e Misofonia</h4>
+        <p>Condições associadas ao zumbido: hipersensibilidade a sons (hiperacusia) e reação emocional intensa a sons específicos (misofonia). Tratados com protocolos específicos no COFE.</p>
+      </div>
+    </div>
+    <div class="zumbido-treatment">
+      <h3>Nossa Abordagem Diagnóstica e Terapêutica</h3>
+      <div class="treatment-step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>Consulta com Otorrinolaringologista</h4>
+          <p>Anamnese detalhada, exame físico completo e investigação das causas subjacentes do zumbido. Avaliação do impacto na qualidade de vida.</p>
+        </div>
+      </div>
+      <div class="treatment-step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>Acufenometria</h4>
+          <p>Exame específico para caracterização precisa do zumbido: identificação de frequência, intensidade, mascaramento e residual inhibition. Exame exclusivo do COFE na região.</p>
+        </div>
+      </div>
+      <div class="treatment-step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>Audiometria Completa + LDL</h4>
+          <p>Avaliação audiométrica completa incluindo pesquisa do Limiar de Desconforto a Sons (LDL), essencial para identificar hiperacusia associada ao zumbido.</p>
+        </div>
+      </div>
+      <div class="treatment-step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h4>Audiometria de Altas Frequências</h4>
+          <p>Detecta perdas auditivas precoces em frequências não avaliadas pela audiometria convencional — frequentemente relacionadas ao zumbido.</p>
+        </div>
+      </div>
+      <div class="treatment-step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <h4>Plano Terapêutico Individualizado</h4>
+          <p>Abordagem multidisciplinar integrando Otorrino e Fonoaudiologia. TRT (Tinnitus Retraining Therapy), terapia sonora, orientações e acompanhamento contínuo.</p>
+        </div>
+      </div>
+
+      <div style="background:var(--off-white);border-radius:18px;padding:1.8rem;margin-top:1rem;border-left:4px solid var(--green-light);">
+        <h4 style="font-size:0.90rem;font-weight:800;color:var(--blue-deep);margin-bottom:0.6rem;">⚠️ Quando procurar o COFE?</h4>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:0.5rem;">
+          <li style="font-size:0.82rem;color:var(--text-light);display:flex;gap:8px;"><span style="color:var(--green-dark);font-weight:700;">✓</span> Zumbido persistente por mais de 3 meses</li>
+          <li style="font-size:0.82rem;color:var(--text-light);display:flex;gap:8px;"><span style="color:var(--green-dark);font-weight:700;">✓</span> Zumbido acompanhado de tontura ou perda auditiva</li>
+          <li style="font-size:0.82rem;color:var(--text-light);display:flex;gap:8px;"><span style="color:var(--green-dark);font-weight:700;">✓</span> Zumbido que afeta sono, concentração ou humor</li>
+          <li style="font-size:0.82rem;color:var(--text-light);display:flex;gap:8px;"><span style="color:var(--green-dark);font-weight:700;">✓</span> Zumbido pulsátil (batendo com o coração)</li>
+          <li style="font-size:0.82rem;color:var(--text-light);display:flex;gap:8px;"><span style="color:var(--green-dark);font-weight:700;">✓</span> Hipersensibilidade a sons do cotidiano</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ ZUMBIDO -->
+  <div class="zumbido-faq">
+    <div class="section-label">Dúvidas Frequentes</div>
+    <h2>Perguntas sobre <em style="font-style:italic;color:var(--green-dark)">Zumbido</em></h2>
+    <div style="max-width:780px;margin-top:2rem;">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          O zumbido tem cura?
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-a">O zumbido pode ter cura quando associado a uma causa tratável identificada (infecção, rolha de cera, otosclerose, etc.). Em casos crônicos sem causa tratável, o objetivo é a habituação — reduzir significativamente o impacto do zumbido na qualidade de vida a ponto de o paciente deixar de percebê-lo de forma perturbadora. As terapias modernas, especialmente a TRT (Tinnitus Retraining Therapy), apresentam excelentes resultados.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Qual a diferença entre zumbido e acúfeno?
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-a">São termos sinônimos. "Acúfeno" é a denominação técnica utilizada na literatura médica e nos prontuários, enquanto "zumbido" é o termo popular mais utilizado pelos pacientes. Ambos se referem à mesma condição: a percepção de sons na ausência de fonte sonora externa.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          O COFE aceita convênios para tratamento de zumbido?
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-a">Sim. O COFE atende os principais convênios de saúde para consultas e a maioria dos exames diagnósticos relacionados ao zumbido, incluindo audiometria, acufenometria e outros. Entre em contato para verificar a cobertura do seu plano específico.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Quantas consultas são necessárias para o tratamento?
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-a">O número de consultas depende da causa e gravidade do zumbido. Geralmente, a avaliação inicial envolve uma consulta médica mais a realização dos exames indicados. O acompanhamento é individualizado — casos mais complexos requerem monitoramento contínuo, enquanto outros respondem rapidamente ao tratamento.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          O que é a Acufenometria e por que é importante?
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-a">A Acufenometria é um exame específico para caracterizar objetivamente o zumbido do paciente, identificando sua frequência predominante, intensidade, mascarabilidade e o fenômeno de Inibição Residual. Essas informações são fundamentais para planejar a terapia sonora e acompanhar a evolução do tratamento de forma quantitativa.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA ZUMBIDO -->
+  <div class="cta-section" style="background:var(--blue-deep);">
+    <div>
+      <h2>Não conviva com o zumbido.</h2>
+      <p>Agende sua avaliação especializada e dê o primeiro passo rumo a uma vida com mais qualidade e silêncio.</p>
+    </div>
+    <a href="https://wa.me/5527996202080" target="_blank" class="btn-cta-white">Agendar Agora</a>
+  </div>
+
+  <!-- FOOTER (duplicado) -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo-text">COFE</div>
+        <div class="footer-logo-sub">Centro de Otorrinolaringologia e Fonoaudiologia Especializada</div>
+        <p class="footer-desc">Vila Velha, Espírito Santo — Fundado em 2009. CRM-ES 6404.</p>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/cofe_centrodeotorrinoefono" target="_blank">📸</a>
+          <a href="https://wa.me/5527996202080" target="_blank">💬</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Navegar</h4>
+        <ul>
+          <li><a href="#" onclick="goHome();return false;">← Voltar ao site</a></li>
+          <li><a href="#" onclick="goHome();document.getElementById('servicos').scrollIntoView({behavior:'smooth'});return false;">Serviços</a></li>
+          <li><a href="#" onclick="goHome();document.getElementById('convenios').scrollIntoView({behavior:'smooth'});return false;">Convênios</a></li>
+          <li><a href="#" onclick="goHome();document.getElementById('contato').scrollIntoView({behavior:'smooth'});return false;">Contato</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Zumbido</h4>
+        <ul>
+          <li><a href="#">O que é Zumbido</a></li>
+          <li><a href="#">Acufenometria</a></li>
+          <li><a href="#">Tipos de Zumbido</a></li>
+          <li><a href="#">Tratamento TRT</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contato</h4>
+        <ul>
+          <li><a href="tel:+552730622080">(27) 3062-2080</a></li>
+          <li><a href="https://wa.me/5527996202080" target="_blank">WhatsApp</a></li>
+          <li><a href="mailto:recepcaocofe@hotmail.com">E-mail</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 COFE — Todos os direitos reservados.</span>
+      <span>Vila Velha — ES</span>
+    </div>
+  </footer>
+
+</div><!-- /page-zumbido -->
+
+<script>
+  /* ===== NAVIGATION ===== */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  function toggleMenu() {
+    document.getElementById('navLinks').classList.toggle('open');
+  }
+
+  /* ===== PAGE ROUTING ===== */
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    document.getElementById('navLinks').classList.remove('open');
+    triggerReveal();
+  }
+
+  function goHome() {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-home').classList.add('active');
+    document.getElementById('navLinks').classList.remove('open');
+    triggerReveal();
+  }
+
+  /* ===== SCROLL REVEAL ===== */
+  function triggerReveal() {
+    setTimeout(() => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { e.target.classList.add('visible'); }
+        });
+      }, { threshold: 0.12 });
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }, 100);
+  }
+  triggerReveal();
+
+  /* ===== FAQ ===== */
+  function toggleFaq(btn) {
+    const item = btn.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  /* ===== SMOOTH INTERNAL LINKS ===== */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+</script>
+</body>
+</html>
