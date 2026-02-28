@@ -520,30 +520,78 @@
     font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em;
   }
 
-  /* ===== CONVENIOS ===== */
-  #convenios { background: var(--white); }
-  .convenios-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 1rem; margin-top: 2.5rem;
+  /* ===== CONVENIOS CAROUSEL ===== */
+  #convenios {
+    background: var(--off-white);
+    padding: 3.5rem 0;
+    overflow: hidden;
   }
-  .convenio-card {
-    background: var(--off-white); border-radius: 14px;
-    padding: 1.2rem 1rem; text-align: center;
-    border: 1.5px solid transparent;
+  #convenios .convenios-header {
+    text-align: center;
+    padding: 0 8%;
+    margin-bottom: 2rem;
+  }
+  .convenios-carousel-wrapper {
+    overflow: hidden;
+    position: relative;
+    padding: 1rem 0 1.5rem;
+    --fade-mask: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    mask-image: var(--fade-mask);
+    -webkit-mask-image: var(--fade-mask);
+  }
+  .convenios-carousel-track {
+    display: flex;
+    gap: 1.25rem;
+    animation: scrollConvenios 32s linear infinite;
+    width: max-content;
+  }
+  .convenios-carousel-track:hover { animation-play-state: paused; }
+  .convenio-slide {
+    flex: 0 0 auto;
+    width: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.4rem 1rem 1rem;
+    background: var(--white);
+    border-radius: 14px;
+    border: 1.5px solid #e8edf2;
     transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    cursor: default;
   }
-  .convenio-card:hover {
-    border-color: var(--green-light); transform: translateY(-3px);
+  .convenio-slide:hover {
+    border-color: var(--green-light);
+    transform: translateY(-4px);
     box-shadow: var(--shadow);
   }
-  .convenio-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
-  .convenio-name {
-    font-size: 0.72rem; font-weight: 800; color: var(--blue-deep);
-    letter-spacing: 0.05em; text-transform: uppercase; line-height: 1.4;
+  .convenio-slide-logo {
+    width: 100px;
+    height: 52px;
+    object-fit: contain;
+    display: block;
   }
-  .convenio-type {
-    font-size: 0.64rem; color: var(--text-light); margin-top: 2px;
-    font-weight: 600;
+  .convenio-slide-fallback {
+    width: 100px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+  }
+  .convenio-slide .convenio-name {
+    font-size: 0.68rem; font-weight: 800; color: var(--blue-deep);
+    letter-spacing: 0.05em; text-transform: uppercase; line-height: 1.4;
+    text-align: center;
+    margin-top: 0.6rem;
+  }
+  .convenio-slide .convenio-type {
+    font-size: 0.6rem; color: var(--text-light); margin-top: 2px;
+    font-weight: 600; text-align: center;
+  }
+  @keyframes scrollConvenios {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
   }
 
   /* ===== DEPOIMENTOS ===== */
@@ -1023,6 +1071,19 @@
     </div>
   </section>
 
+  <!-- CONVÊNIOS -->
+  <section id="convenios">
+    <div class="convenios-header">
+      <div class="section-label reveal">Convênios & Parcerias</div>
+      <h2 class="section-title reveal">Atendemos os <em>principais planos</em> de saúde</h2>
+      <p class="section-sub reveal" style="margin:0 auto;">Consulta particular disponível para todos os pacientes.</p>
+    </div>
+    <div class="convenios-carousel-wrapper">
+      <div class="convenios-carousel-track" id="conveniosTrack"></div>
+    </div>
+  </section>
+
+
   <!-- MARQUEE -->
   <div class="strip">
     <div class="strip-track">
@@ -1229,74 +1290,6 @@
     </div>
   </section>
 
-  <!-- CONVÊNIOS -->
-  <section id="convenios" style="background:var(--white);">
-    <div class="section-label reveal">Convênios & Parcerias</div>
-    <h2 class="section-title reveal">Atendemos os <em>principais planos</em> de saúde</h2>
-    <p class="section-sub reveal" style="margin-bottom:0;">Consulta particular disponível para todos os pacientes.</p>
-    <div class="convenios-grid">
-      <div class="convenio-card reveal reveal-delay-1">
-        <div class="convenio-icon">🏥</div>
-        <div class="convenio-name">MedSenior</div>
-        <div class="convenio-type">Convênio</div>
-      </div>
-      <div class="convenio-card reveal reveal-delay-1">
-        <div class="convenio-icon">🏥</div>
-        <div class="convenio-name">Unimed</div>
-        <div class="convenio-type">Consultas Selecionadas + Exames</div>
-      </div>
-      <div class="convenio-card reveal reveal-delay-2">
-        <div class="convenio-icon">🏥</div>
-        <div class="convenio-name">Santa Casa Saúde</div>
-        <div class="convenio-type">Convênio</div>
-      </div>
-      <div class="convenio-card reveal reveal-delay-2">
-        <div class="convenio-icon">🏥</div>
-        <div class="convenio-name">SAMP / São Bernardo</div>
-        <div class="convenio-type">Convênio</div>
-      </div>
-      <div class="convenio-card reveal reveal-delay-3">
-        <div class="convenio-icon">🏥</div>
-        <div class="convenio-name">Petrobras Saúde</div>
-        <div class="convenio-type">Dra. Aline + Exames</div>
-      </div>
-      <div class="convenio-card reveal reveal-delay-3">
-        <div class="convenio-icon">🏥</div>
-        <div class="convenio-name">CASSI</div>
-        <div class="convenio-type">Convênio</div>
-      </div>
-      <div class="convenio-card reveal reveal-delay-1">
-        <div class="convenio-icon">🏥</div>
-        <div class="convenio-name">AFPES</div>
-        <div class="convenio-type">Parceria</div>
-      </div>
-      <div class="convenio-card reveal reveal-delay-2">
-        <div class="convenio-icon">🏥</div>
-        <div class="convenio-name">Amor Saúde</div>
-        <div class="convenio-type">Parceria</div>
-      </div>
-      <div class="convenio-card reveal reveal-delay-3">
-        <div class="convenio-icon">🏥</div>
-        <div class="convenio-name">Postal Saúde</div>
-        <div class="convenio-type">Convênio</div>
-      </div>
-      <div class="convenio-card reveal reveal-delay-1">
-        <div class="convenio-icon">🏥</div>
-        <div class="convenio-name">GEAP</div>
-        <div class="convenio-type">Convênio</div>
-      </div>
-      <div class="convenio-card reveal reveal-delay-2">
-        <div class="convenio-icon">🏥</div>
-        <div class="convenio-name">Marinha do Brasil</div>
-        <div class="convenio-type">Convênio</div>
-      </div>
-      <div class="convenio-card reveal reveal-delay-3">
-        <div class="convenio-icon">💳</div>
-        <div class="convenio-name">Particular</div>
-        <div class="convenio-type">Todos os Médicos</div>
-      </div>
-    </div>
-  </section>
 
   <!-- DEPOIMENTOS -->
   <section id="depoimentos" style="padding:6rem 8%;">
@@ -1729,6 +1722,69 @@
       if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
     });
   });
+</script>
+<script>
+  /* ===== CONVENIOS CAROUSEL ===== */
+  (function () {
+    var plans = [
+      { name: "MedSenior",          type: "Convênio",                       logo: "https://logo.clearbit.com/medsenior.com.br",   icon: "🏥" },
+      { name: "Unimed",             type: "Consultas Selecionadas + Exames", logo: "https://logo.clearbit.com/unimed.coop.br",    icon: "🏥" },
+      { name: "Santa Casa Saúde",   type: "Convênio",                       logo: "https://logo.clearbit.com/santacasasaude.org.br", icon: "🏥" },
+      { name: "SAMP / São Bernardo",type: "Convênio",                       logo: "https://logo.clearbit.com/sampbrasil.com.br", icon: "🏥" },
+      { name: "Petrobras Saúde",    type: "Dra. Aline + Exames",            logo: "https://logo.clearbit.com/petrobras.com.br",  icon: "🏥" },
+      { name: "CASSI",              type: "Convênio",                       logo: "https://logo.clearbit.com/cassi.com.br",      icon: "🏥" },
+      { name: "AFPES",              type: "Parceria",                       logo: "https://logo.clearbit.com/afpes.com.br",      icon: "🏥" },
+      { name: "Amor Saúde",         type: "Parceria",                       logo: "https://logo.clearbit.com/amorsaude.com.br",  icon: "🏥" },
+      { name: "Postal Saúde",       type: "Convênio",                       logo: "https://logo.clearbit.com/postalsaude.com.br",icon: "🏥" },
+      { name: "GEAP",               type: "Convênio",                       logo: "https://logo.clearbit.com/geap.com.br",       icon: "🏥" },
+      { name: "Marinha do Brasil",  type: "Convênio",                       logo: "https://logo.clearbit.com/marinha.mil.br",    icon: "⚓" },
+      { name: "Particular",         type: "Todos os Médicos",               logo: "",                                            icon: "💳" }
+    ];
+
+    function onLogoError(img) {
+      img.style.display = 'none';
+      img.nextElementSibling.style.display = 'flex';
+    }
+
+    function buildSlide(plan) {
+      var slide = document.createElement('div');
+      slide.className = 'convenio-slide';
+      var logoEl, fallbackEl;
+      if (plan.logo) {
+        logoEl = document.createElement('img');
+        logoEl.className = 'convenio-slide-logo';
+        logoEl.src = plan.logo;
+        logoEl.alt = plan.name;
+        logoEl.onerror = function () { onLogoError(this); };
+        fallbackEl = document.createElement('div');
+        fallbackEl.className = 'convenio-slide-fallback';
+        fallbackEl.style.display = 'none';
+        fallbackEl.textContent = plan.icon;
+        slide.appendChild(logoEl);
+        slide.appendChild(fallbackEl);
+      } else {
+        fallbackEl = document.createElement('div');
+        fallbackEl.className = 'convenio-slide-fallback';
+        fallbackEl.textContent = plan.icon;
+        slide.appendChild(fallbackEl);
+      }
+      var nameEl = document.createElement('div');
+      nameEl.className = 'convenio-name';
+      nameEl.textContent = plan.name;
+      var typeEl = document.createElement('div');
+      typeEl.className = 'convenio-type';
+      typeEl.textContent = plan.type;
+      slide.appendChild(nameEl);
+      slide.appendChild(typeEl);
+      return slide;
+    }
+
+    var track = document.getElementById('conveniosTrack');
+    if (!track) return;
+    var frag = document.createDocumentFragment();
+    plans.concat(plans).forEach(function (plan) { frag.appendChild(buildSlide(plan)); });
+    track.appendChild(frag);
+  })();
 </script>
 </body>
 </html>
